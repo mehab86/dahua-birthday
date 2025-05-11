@@ -1,57 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dahua Birthday Reminder</title>
+  <title>Dahua Technology | Birthday Reminder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6fa;
-      color: #333;
-      margin: 0;
-      padding: 20px;
+      background: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .header {
       background-color: #d71920;
-      color: #fff;
-      padding: 20px;
+      color: white;
+      padding: 1rem;
       text-align: center;
-      font-size: 24px;
+      font-size: 1.5rem;
     }
     .container {
-      margin-top: 30px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      background: #fff;
-      padding: 20px;
+      background: white;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     label {
+      font-weight: bold;
+      margin-top: 1rem;
       display: block;
-      margin-top: 15px;
     }
     input, select {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
       border-radius: 4px;
       border: 1px solid #ccc;
     }
     button {
-      margin-top: 20px;
       background-color: #d71920;
-      color: #fff;
-      padding: 12px 20px;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      margin-top: 1rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #b5151a;
+      background-color: #b7171b;
+    }
+    .link-btn {
+      display:inline-block;
+      margin-left: 10px;
+      padding: 10px 20px;
+      background-color: #d71920;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -59,32 +63,57 @@
   <div class="header">Dahua Technology | Birthday Reminder</div>
   <div class="container">
     <h2>Add Client</h2>
-    <form>
+    <form id="clientForm">
       <label for="name_ar">Client Name (Arabic)</label>
       <input type="text" id="name_ar" placeholder="اسم العميل" />
 
-      <label for="name">Full Name</label>
-      <input type="text" id="name" placeholder="Client Name" />
+      <label for="full-name">Full Name</label>
+      <input type="text" id="full-name" placeholder="Client Name" name="full-name" required />
 
       <label for="phone">Phone Number</label>
-      <input type="text" id="phone" placeholder="+9665XXXXXXXX" />
+      <input type="text" id="phone" placeholder="+9665XXXXXXXX" name="phone" required />
 
       <label for="email">Email</label>
-      <input type="email" id="email" placeholder="example@email.com" />
+      <input type="email" id="email" placeholder="example@email.com" name="email" required />
 
       <label for="birthday">Birthday</label>
-      <input type="date" id="birthday" />
+      <input type="date" id="birthday" name="birthday" required />
 
       <label for="channel">Preferred Channel</label>
-      <select id="channel">
-        <option>Email</option>
-        <option>WhatsApp</option>
-        <option>Both</option>
+      <select id="channel" name="channel">
+        <option value="Email">Email</option>
+        <option value="WhatsApp">WhatsApp</option>
+        <option value="Both">Both</option>
       </select>
 
       <button type="submit">Save</button>
-    <a href="./client-list.html" style="display:inline-block;margin-top:15px;padding:10px 20px;background-color:#d71920;color:white;border-radius:5px;text-decoration:none;">📋 View Client List</a>
-</form>
+      <a href="./client-list.html" class="link-btn">📋 View Client List</a>
+    </form>
   </div>
+
+  <script>
+    document.getElementById("clientForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("full-name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const birthday = document.getElementById("birthday").value;
+      const method = document.getElementById("channel").value;
+
+      if (!name || !phone || !email || !birthday) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const newClient = { name, phone, email, birthday, method };
+      let clients = JSON.parse(localStorage.getItem('clients') || '[]');
+      clients.push(newClient);
+      localStorage.setItem('clients', JSON.stringify(clients));
+
+      alert("✅ Client saved successfully!");
+      document.getElementById("clientForm").reset();
+    });
+  </script>
 </body>
 </html>
